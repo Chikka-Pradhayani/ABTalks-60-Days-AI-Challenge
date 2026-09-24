@@ -1,0 +1,531 @@
+# **Auronix — Day 42: System Architecture Design**
+
+## **1. System Architecture**
+
+```text
+                    AURONIX USER
+                         |
+                         v
+                +------------------+
+                | Next.js / React  |
+                |    Frontend      |
+                +--------+---------+
+                         |
+                       HTTPS
+                         |
+                         v
+                +------------------+
+                | FastAPI Backend  |
+                +--------+---------+
+                         |
+              +----------+----------+
+              |                     |
+              v                     v
+       +-------------+      +---------------+
+       | Auth + RBAC |      |  PostgreSQL   |
+       +------+------+      | Users / Roles |
+              |             | Audit / Meta  |
+              |             +---------------+
+              v
+       +------------------+
+       |   RAG Pipeline   |
+       +--------+---------+
+                |
+          Retrieve chunks
+                |
+                v
+       +------------------+
+       |   Chroma Vector  |
+       |    Database      |
+       +--------+---------+
+                |
+          Relevant Chunks
+                |
+                v
+       +------------------+
+       |  Ollama + Qwen   |
+       |    Local LLM     |
+       +--------+---------+
+                |
+          Generated Answer
+                |
+                v
+       +------------------+
+       | Answer + Sources |
+       +------------------+
+
+
+        DOCUMENT INGESTION
+
+ +--------------------------+
+ | Company Documents        |
+ | PDF / DOCX / TXT / etc.  |
+ +------------+-------------+
+              |
+              v
+       +---------------+
+       | Document      |
+       | Parser        |
+       +------+--------+
+              |
+              v
+       +--------------+
+       |   Chunking   |
+       +------+-------+
+              |
+              v
+       +--------------+
+       |  Embedding   |
+       |    Model     |
+       +------+-------+
+              |
+              v
+       +--------------+
+       | Chroma DB    |
+       +--------------+
+```
+
+The architecture uses a web frontend, FastAPI backend, authentication and role-based access control, RAG, Chroma vector storage, PostgreSQL, and a local Ollama/Qwen model.
+
+---
+
+## **2. Data Model**
+
+Auronix requires the following main data entities.
+
+### **User**
+
+* user_id
+* name
+* email
+* role
+
+### **Role**
+
+* role_id
+* permissions
+
+### **Document**
+
+* document_id
+* filename
+* file_type
+* uploaded_by
+* upload_date
+* version
+* status
+
+### **Document Chunk**
+
+* chunk_id
+* document_id
+* text
+* metadata
+* embedding
+
+### **Conversation**
+
+* session_id
+* user_id
+* timestamp
+
+### **Message**
+
+* message_id
+* session_id
+* question
+* answer
+* sources
+
+### **Audit Log**
+
+* log_id
+* user_id
+* action
+* resource
+* timestamp
+
+---
+
+## **3. Data Storage**
+
+### **PostgreSQL**
+
+Stores:
+
+* Users
+* Roles
+* Conversations
+* Messages
+* Audit Logs
+* Document Metadata
+
+### **Chroma**
+
+Stores:
+
+* Document Chunks
+* Embeddings
+
+### **Local File Storage**
+
+Stores:
+
+* Original Company Documents
+
+---
+
+## **4. Knowledge Base Update Flow**
+
+When a new company document is added, Auronix processes it through the following flow:
+
+```text
+New Document
+     |
+     v
+File Validation
+     |
+     v
+Document Parsing
+     |
+     v
+Text Extraction
+     |
+     v
+Chunking
+     |
+     v
+Embedding Generation
+     |
+     v
+Chroma Vector Database
+     |
+     v
+Metadata Stored
+     |
+     v
+Document Becomes Searchable
+```
+
+When an existing document is updated:
+
+```text
+Updated Document
+       |
+       v
+Detect New Version
+       |
+       v
+Remove Old Chunks
+       |
+       v
+Process New Content
+       |
+       v
+Generate New Embeddings
+       |
+       v
+Insert New Vectors
+```
+
+This prevents outdated information from remaining in retrieval results.
+
+---
+
+## **5. Technology Stack**
+
+### **Frontend — Next.js + React**
+
+Used for the interactive Auronix web interface and employee chat experience.
+
+### **Backend — FastAPI**
+
+Used for the API layer because Python integrates directly with the AI and RAG ecosystem and supports typed API schemas.
+
+### **LLM Runtime — Ollama**
+
+Used to run the language model locally so confidential company information does not need to be sent to an external LLM API.
+
+### **LLM — Qwen**
+
+Used as the open-weight local language model for general enterprise question answering and experimentation.
+
+### **Embedding Model — Sentence Transformers**
+
+Used to generate embeddings locally without requiring a paid external embedding API.
+
+### **Vector Database — Chroma**
+
+Used for local vector storage and semantic retrieval during the prototype stage.
+
+### **Database — PostgreSQL**
+
+Used to store structured information such as users, permissions, conversations, document metadata, and audit information.
+
+### **File Storage — Local Filesystem**
+
+Used to keep uploaded company documents inside the private environment.
+
+### **Authentication — JWT**
+
+Used for authentication between the frontend and backend.
+
+### **Automation — n8n**
+
+Used for connecting document ingestion, notifications, and internal workflows.
+
+### **Containerization — Docker**
+
+Used to make the local Auronix architecture reproducible.
+
+### **Version Control — GitHub**
+
+Used to manage the project source code, documentation, and architecture.
+
+---
+
+## **6. Architectural Trade-offs**
+
+### **Trade-off 1 — Local LLM vs Cloud API**
+
+**Choice:** Run the LLM locally using Ollama.
+
+**Trade-off:** This improves data privacy but gives up some cloud-model capabilities and may require more local computing resources. This is acceptable because Auronix is designed for confidential company information.
+
+### **Trade-off 2 — Chroma vs Managed Vector Database**
+
+**Choice:** Use Chroma locally.
+
+**Trade-off:** Chroma provides less managed scalability than cloud vector databases, but removes external infrastructure and keeps the prototype completely local.
+
+### **Trade-off 3 — PostgreSQL + Chroma vs One Database**
+
+**Choice:** Use PostgreSQL for structured application data and Chroma for vector data.
+
+**Trade-off:** Maintaining two storage systems adds synchronization complexity, but separating relational data from vector search makes each storage layer better suited to its specific workload.
+
+---
+
+## **7. API Contract**
+
+### **POST /auth/login**
+
+**Request:**
+
+```json
+{
+  "email": "employee@auronix.com",
+  "password": "password"
+}
+```
+
+**Response:**
+
+```json
+{
+  "access_token": "jwt-token",
+  "user": {
+    "id": "u001",
+    "name": "Employee",
+    "role": "developer"
+  }
+}
+```
+
+**Errors:**
+
+* 400 — Invalid request
+* 401 — Invalid credentials
+* 500 — Internal server error
+
+---
+
+### **POST /documents/upload**
+
+**Request:**
+
+```text
+multipart/form-data
+
+file: company_policy.pdf
+```
+
+**Response:**
+
+```json
+{
+  "document_id": "doc001",
+  "filename": "company_policy.pdf",
+  "status": "processing"
+}
+```
+
+**Errors:**
+
+* 400 — Invalid file
+* 401 — Unauthorized
+* 413 — File too large
+* 415 — Unsupported file type
+* 500 — Processing error
+
+---
+
+### **POST /chat**
+
+**Request:**
+
+```json
+{
+  "session_id": "session001",
+  "query": "What is Auronix's leave policy?"
+}
+```
+
+**Response:**
+
+```json
+{
+  "answer": "According to the company leave policy...",
+  "sources": [
+    {
+      "document_id": "doc001",
+      "chunk_id": "chunk014"
+    }
+  ]
+}
+```
+
+**Errors:**
+
+* 400 — Invalid request
+* 401 — Unauthorized
+* 403 — Insufficient permissions
+* 404 — Session not found
+* 500 — Generation error
+
+---
+
+### **GET /documents**
+
+**Response:**
+
+```json
+{
+  "documents": [
+    {
+      "document_id": "doc001",
+      "filename": "company_policy.pdf",
+      "status": "indexed"
+    }
+  ]
+}
+```
+
+---
+
+### **GET /audit-logs**
+
+**Response:**
+
+```json
+{
+  "logs": [
+    {
+      "user_id": "u001",
+      "action": "DOCUMENT_UPLOAD",
+      "resource": "doc001",
+      "timestamp": "2026-09-24T10:30:00"
+    }
+  ]
+}
+```
+
+---
+
+## **8. Component Dependency / Build Order**
+
+The components should be developed in the following order:
+
+```text
+PostgreSQL
+     |
+     v
+Authentication
+     |
+     v
+RBAC / Users
+     |
+     v
+FastAPI Core
+     |
+     v
+Document Upload
+     |
+     v
+Document Parser
+     |
+     v
+Chunking
+     |
+     v
+Embeddings
+     |
+     v
+Chroma DB
+     |
+     v
+RAG Retrieval
+     |
+     v
+Ollama + Qwen
+     |
+     v
+Chat API
+     |
+     v
+Next.js Frontend
+     |
+     v
+Complete Auronix System
+```
+
+### **Suggested Build Order**
+
+* **Day 43:** Project foundation + Docker
+* **Day 44:** PostgreSQL + database models
+* **Day 45:** Authentication
+* **Day 46:** RBAC
+* **Day 47:** Document upload
+* **Day 48:** Document parsing + chunking
+* **Day 49:** Embeddings + Chroma
+* **Day 50:** RAG retrieval
+* **Day 51:** Ollama + Qwen integration
+* **Day 52:** Chat API + frontend integration
+* **Day 53:** Audit logs + final integration
+
+---
+
+## **9. Peer Feedback**
+
+**Peer:** [Name]
+
+**Feedback received:**
+
+"The original architecture did not clearly show where document metadata and audit information were stored."
+
+**Change incorporated:**
+
+"Added PostgreSQL as the structured storage layer and explicitly connected document metadata and audit logs to PostgreSQL in the architecture."
+
+---
+
+## **10. Day 42 Completion**
+
+The Day 42 architecture design includes:
+
+* System Architecture
+* Data Model
+* Technology Stack
+* Three Architectural Trade-offs
+* API Contract
+* Component Dep
