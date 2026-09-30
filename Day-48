@@ -1,23 +1,30 @@
 # ==============================================================================
-# 🌟 VIEW WITH FULL DYNAMIC HEADING TEXT SIZES & FORMATTED PREVIEW:
-# 👉 Click here: https://github.com/Chikka-Pradhayani/ABTalks-60-Days-AI-Challenge/blob/main/Day-48.md
-# (GitHub renders full Markdown heading sizes for .md files)
+# 🌟 FOR GITHUB RENDERED PREVIEW WITH BROWSER HEADING SIZES:
+# 👉 Open: https://github.com/Chikka-Pradhayani/ABTalks-60-Days-AI-Challenge/blob/main/Day-48.md
 # ==============================================================================
 
-# DAY 48 — BUILD PRODUCT-SPECIFIC MEMORY AND PERSONALISATION
+# ==============================================================================
+# ╔════════════════════════════════════════════════════════════════════════════╗
+# ║  𝗗𝗔𝗬 𝟰𝟴: 𝗕𝗨𝗜𝗟𝗗 𝗣𝗥𝗢𝗗𝗨𝗖𝗧-𝗦𝗣𝗘𝗖𝗜𝗙𝗜𝗖 𝗠𝗘𝗠𝗢𝗥𝗬 𝗔𝗡𝗗 𝗣𝗘𝗥𝗦𝗢𝗡𝗔𝗟𝗜𝗦𝗔𝗧𝗜𝗢𝗡             ║
+# ╚════════════════════════════════════════════════════════════════════════════╝
+# ==============================================================================
 
 ---
 
-================================================================================
-## 1. OBJECTIVE
-================================================================================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## ■ 𝟭. 𝗢𝗕𝗝𝗘𝗖𝗧𝗜𝗩𝗘
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 The objective of **Day 48** is to engineer a durable, production-grade **product-specific memory and personalisation system** for **AURONIX** (the private enterprise AI workbench).
 
 While generic conversational memory merely records raw message history, a product-specific memory system selectively identifies, structures, and persists high-value information about each user. Across sessions, AURONIX leverages this memory to automatically tailor its tone, abstraction level, code examples, and technical recommendations without requiring users to repeat their background, tech stack, or engineering preferences in every prompt.
 
 ---
 
-## 2. Product-Specific Memory Definition
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## ■ 𝟮. 𝗣𝗥𝗢𝗗𝗨𝗖𝗧-𝗦𝗣𝗘𝗖𝗜𝗙𝗜𝗖 𝗠𝗘𝗠𝗢𝗥𝗬 𝗗𝗘𝗙𝗜𝗡𝗜𝗧𝗜𝗢𝗡
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 AURONIX is an enterprise AI assistant for internal company operations, software architecture, technical infrastructure, and incident runbooks. Rather than capturing conversational filler or every ephemeral query, AURONIX remembers durable, high-signal technical profile data:
 
 | Field | Type | Purpose | Why AURONIX Benefits |
@@ -37,11 +44,15 @@ AURONIX is an enterprise AI assistant for internal company operations, software 
 
 ---
 
-## 3. SQLite UserProfile Schema & Database Implementation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## ■ 𝟯. 𝗦𝗤𝗟𝗜𝗧𝗘 𝗨𝗦𝗘𝗥𝗣𝗥𝗢𝗙𝗜𝗟𝗘 𝗦𝗖𝗛𝗘𝗠𝗔 & 𝗗𝗔𝗧𝗔𝗕𝗔𝗦𝗘 𝗜𝗠𝗣𝗟𝗘𝗠𝗘𝗡𝗧𝗔𝗧𝗜𝗢𝗡
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 The SQLite persistence layer cleanly decouples database queries from application business logic. All profile and history operations are strictly scoped to `user_id`.
 
-### SQLite Schema
+───────────────────────────────────────────────────────────────────────────────
+### ▶ 3.1 SQLite Schema
+───────────────────────────────────────────────────────────────────────────────
 
 ```sql
 CREATE TABLE IF NOT EXISTS user_profiles (
@@ -74,7 +85,9 @@ CREATE INDEX IF NOT EXISTS idx_interactions_user_id ON interaction_history (user
 CREATE INDEX IF NOT EXISTS idx_interactions_summarized ON interaction_history (user_id, is_summarized);
 ```
 
-### Complete Database Implementation (`database.py`)
+───────────────────────────────────────────────────────────────────────────────
+### ▶ 3.2 Complete Database Implementation (database.py)
+───────────────────────────────────────────────────────────────────────────────
 
 ```python
 import json
@@ -304,7 +317,9 @@ def get_user_interaction_count(user_id: str, db_path: str = "auronix_memory.db")
 
 ---
 
-## 4. Memory Read Pipeline
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## ■ 𝟰. 𝗠𝗘𝗠𝗢𝗥𝗬 𝗥𝗘𝗔𝗗 𝗣𝗜𝗣𝗘𝗟𝗜𝗡𝗘
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 The memory read pipeline injects filtered context into the system prompt:
 
@@ -326,7 +341,9 @@ Generate LLM Response
 Return Personalised Response
 ```
 
-### Complete Personalisation Engine (`personalisation.py`)
+───────────────────────────────────────────────────────────────────────────────
+### ▶ 4.1 Complete Personalisation Engine (personalisation.py)
+───────────────────────────────────────────────────────────────────────────────
 
 ```python
 import os
@@ -515,7 +532,9 @@ def generate_personalised_response(user_id: str, query: str, db_path: str = "aur
 
 ---
 
-## 5. Memory Write Pipeline & LLM Extractor
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## ■ 𝟱. 𝗠𝗘𝗠𝗢𝗥𝗬 𝗪𝗥𝗜𝗧𝗘 𝗣𝗜𝗣𝗘𝗟𝗜𝗡𝗘 & 𝗟𝗟𝗠 𝗘𝗫𝗧𝗥𝗔𝗖𝗧𝗢𝗥
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ```text
 User Request
@@ -533,7 +552,9 @@ Validate Extracted JSON (Pydantic schema)
 Update UserProfile & Log Turn in SQLite
 ```
 
-### Extractor Implementation (`extractor.py`)
+───────────────────────────────────────────────────────────────────────────────
+### ▶ 5.1 Extractor Implementation (extractor.py)
+───────────────────────────────────────────────────────────────────────────────
 
 ```python
 import json
@@ -635,14 +656,18 @@ def extract_durable_memory(user_input: str, ai_response: str, current_profile: O
 
 ---
 
-## 6. User History Summarisation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## ■ 𝟲. 𝗨𝗦𝗘𝗥 𝗛𝗜𝗦𝗧𝗢𝗥𝗬 𝗦𝗨𝗠𝗠𝗔𝗥𝗜𝗦𝗔𝗧𝗜𝗢𝗡
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Implemented strictly with the signature:
 ```python
 def summarise_user_history(user_id: str, db_path: str = "auronix_memory.db", client: Optional[OpenAI] = None) -> Optional[str]:
 ```
 
-### Implementation (`summarizer.py`)
+───────────────────────────────────────────────────────────────────────────────
+### ▶ 6.1 Implementation (summarizer.py)
+───────────────────────────────────────────────────────────────────────────────
 
 ```python
 SUMMARISATION_THRESHOLD = 20
@@ -706,9 +731,13 @@ def summarise_user_history(user_id: str, db_path: str = "auronix_memory.db", cli
 
 ---
 
-## 7. Lifecycle Manager & FastAPI Service
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## ■ 𝟳. 𝗟𝗜𝗙𝗘𝗖𝗬𝗖𝗟𝗘 𝗠𝗔𝗡𝗔𝗚𝗘𝗥 & 𝗙𝗔𝗦𝗧𝗔𝗣𝗜 𝗦𝗘𝗥𝗩𝗜𝗖𝗘
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-### Lifecycle Coordinator (`MemoryManager`)
+───────────────────────────────────────────────────────────────────────────────
+### ▶ 7.1 Lifecycle Coordinator (MemoryManager)
+───────────────────────────────────────────────────────────────────────────────
 
 ```python
 class MemoryManager:
@@ -756,7 +785,9 @@ class MemoryManager:
         }
 ```
 
-### FastAPI Endpoints (`api.py`)
+───────────────────────────────────────────────────────────────────────────────
+### ▶ 7.2 FastAPI Endpoints (api.py)
+───────────────────────────────────────────────────────────────────────────────
 
 Exposes REST endpoints:
 * `POST /api/profiles`: Creates new UserProfile
@@ -769,17 +800,11 @@ Exposes REST endpoints:
 
 ---
 
-## 8. Two-User Personalisation Demonstration
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## ■ 𝟴. 𝗧𝗪𝗢-𝗨𝗦𝗘𝗥 𝗣𝗘𝗥𝗦𝗢𝗡𝗔𝗟𝗜𝗦𝗔𝗧𝗜𝗢𝗡 𝗗𝗘𝗠𝗢𝗡𝗦𝗧𝗥𝗔𝗧𝗜𝗢𝗡
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Run the automated demonstration script:
-```powershell
-python -c "
-from memory.memory_manager import MemoryManager
-# Execute comparison
-"
-```
-
-### Comparative Output (Identical Query: *"How should I design and implement connection pooling for our services?"*)
+Comparative Output for the Identical Query: *"How should I design and implement connection pooling for our services?"*
 
 ```text
 ================================ USER A ================================
@@ -894,9 +919,11 @@ PERSONALISATION DEMONSTRATION VERIFICATION:
 
 ---
 
-## 9. Comprehensive Test Suite & Pytest Verification
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## ■ 𝟵. 𝗖𝗢𝗠𝗣𝗥𝗘𝗛𝗘𝗡𝗦𝗜𝗩𝗘 𝗧𝗘𝗦𝗧 𝗦𝗨𝗜𝗧𝗘 & 𝗣𝗬𝗧𝗘𝗦𝗧 𝗩𝗘𝗥𝗜𝗙𝗜𝗖𝗔𝗧𝗜𝗢𝗡
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-### Automated Tests Executed
+Automated Tests Executed:
 1. `test_create_user_profile` — **PASSED**
 2. `test_create_duplicate_user_profile_raises_error` — **PASSED**
 3. `test_retrieve_user_profile` — **PASSED**
@@ -920,7 +947,9 @@ PERSONALISATION DEMONSTRATION VERIFICATION:
 
 ---
 
-## 10. Privacy Documentation & Data Deletion
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## ■ 𝟭𝟬. 𝗣𝗥𝗜𝗩𝗔𝗖𝗬 𝗗𝗢𝗖𝗨𝗠𝗘𝗡𝗧𝗔𝗧𝗜𝗢𝗡 & 𝗗𝗔𝗧𝗔 𝗗𝗘𝗟𝗘𝗧𝗜𝗢𝗡
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ### What Data Is Stored?
 The AURONIX memory system strictly limits stored data to the fields defined in `UserProfile`:
@@ -957,7 +986,9 @@ Deletion is strictly scoped to `user_id`, cascading through both `user_profiles`
 
 ---
 
-## 11. Run Instructions
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## ■ 𝟭𝟭. 𝗥𝗨𝗡 𝗜𝗡𝗦𝗧𝗥𝗨𝗖𝗧𝗜𝗢𝗡𝗦
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ### 1. Requirements
 ```bash
