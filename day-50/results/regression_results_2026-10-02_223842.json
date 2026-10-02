@@ -1,0 +1,85 @@
+{
+  "timestamp": "2026-10-02 22:38:42",
+  "status": "PASS",
+  "thresholds": {
+    "easy": 4.0,
+    "medium": 3.5,
+    "hard": 3.0,
+    "overall": 3.5,
+    "correctness": 3.5,
+    "relevance": 3.5,
+    "completeness": 3.0,
+    "faithfulness": 3.5,
+    "hallucination_avoidance": 3.5
+  },
+  "measured_scores": {
+    "easy": 4.94,
+    "medium": 4.7,
+    "hard": 4.52,
+    "overall": 4.72,
+    "correctness": 5.0,
+    "relevance": 4.37,
+    "completeness": 5.0,
+    "faithfulness": 4.3,
+    "hallucination_avoidance": 5.0
+  },
+  "failed_dimensions": [],
+  "passed_dimensions": [
+    {
+      "dimension": "easy",
+      "score": 4.94,
+      "required": 4.0,
+      "surplus": 0.94
+    },
+    {
+      "dimension": "medium",
+      "score": 4.7,
+      "required": 3.5,
+      "surplus": 1.2
+    },
+    {
+      "dimension": "hard",
+      "score": 4.52,
+      "required": 3.0,
+      "surplus": 1.52
+    },
+    {
+      "dimension": "overall",
+      "score": 4.72,
+      "required": 3.5,
+      "surplus": 1.22
+    },
+    {
+      "dimension": "correctness",
+      "score": 5.0,
+      "required": 3.5,
+      "surplus": 1.5
+    },
+    {
+      "dimension": "relevance",
+      "score": 4.37,
+      "required": 3.5,
+      "surplus": 0.87
+    },
+    {
+      "dimension": "completeness",
+      "score": 5.0,
+      "required": 3.0,
+      "surplus": 2.0
+    },
+    {
+      "dimension": "faithfulness",
+      "score": 4.3,
+      "required": 3.5,
+      "surplus": 0.8
+    },
+    {
+      "dimension": "hallucination_avoidance",
+      "score": 5.0,
+      "required": 3.5,
+      "surplus": 1.5
+    }
+  ],
+  "eval_run_id": "eval_2026-10-02_223842",
+  "raw_results_file": "regression_results_2026-10-02_223842.json"
+}
