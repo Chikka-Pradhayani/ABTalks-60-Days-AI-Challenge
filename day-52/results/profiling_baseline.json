@@ -1,0 +1,516 @@
+{
+  "summary": {
+    "session_name": "baseline_profile",
+    "total_queries": 20,
+    "cache_hits": 0,
+    "cache_hit_rate_pct": 0.0,
+    "total_cost_usd": 0.002193,
+    "avg_cost_per_query_usd": 0.0001096,
+    "avg_latency_per_query_ms": 4.357,
+    "total_input_tokens": 11252,
+    "total_output_tokens": 842,
+    "total_embedding_tokens": 0,
+    "avg_input_tokens_per_query": 562.6,
+    "avg_output_tokens_per_query": 42.1,
+    "stage_breakdown": {
+      "input_validation_normalization": {
+        "mean_ms": 0.009,
+        "min_ms": 0.004,
+        "max_ms": 0.028,
+        "pct_of_total": 0.2
+      },
+      "semantic_cache_lookup": {
+        "mean_ms": 1.698,
+        "min_ms": 0.019,
+        "max_ms": 33.121,
+        "pct_of_total": 38.98
+      },
+      "knowledge_retrieval_ranking": {
+        "mean_ms": 1.801,
+        "min_ms": 1.195,
+        "max_ms": 2.41,
+        "pct_of_total": 41.34
+      },
+      "prompt_assembly": {
+        "mean_ms": 0.757,
+        "min_ms": 0.438,
+        "max_ms": 1.172,
+        "pct_of_total": 17.37
+      },
+      "llm_inference": {
+        "mean_ms": 0.089,
+        "min_ms": 0.048,
+        "max_ms": 0.134,
+        "pct_of_total": 2.05
+      },
+      "response_formatting": {
+        "mean_ms": 0.003,
+        "min_ms": 0.002,
+        "max_ms": 0.005,
+        "pct_of_total": 0.07
+      }
+    }
+  },
+  "queries": [
+    {
+      "query_id": "SQ-01",
+      "query_text": "What is AURONIX mainly used for in our company?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 592,
+      "output_tokens": 46,
+      "embedding_tokens": 0,
+      "total_tokens": 638,
+      "estimated_cost_usd": 0.0001164,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.009,
+        "semantic_cache_lookup": 33.121,
+        "knowledge_retrieval_ranking": 2.301,
+        "prompt_assembly": 1.172,
+        "llm_inference": 0.134,
+        "response_formatting": 0.005
+      },
+      "total_latency_ms": 36.742,
+      "metadata": {
+        "category": "Architecture"
+      }
+    },
+    {
+      "query_id": "SQ-02",
+      "query_text": "Which engineering team owns and maintains the customer-support module, and who leads it?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 512,
+      "output_tokens": 28,
+      "embedding_tokens": 0,
+      "total_tokens": 540,
+      "estimated_cost_usd": 9.36e-05,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.014,
+        "semantic_cache_lookup": 0.053,
+        "knowledge_retrieval_ranking": 2.135,
+        "prompt_assembly": 0.894,
+        "llm_inference": 0.1,
+        "response_formatting": 0.004
+      },
+      "total_latency_ms": 3.2,
+      "metadata": {
+        "category": "Ownership"
+      }
+    },
+    {
+      "query_id": "SQ-03",
+      "query_text": "What port is allocated to the FastAPI backend service in the network matrix?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 560,
+      "output_tokens": 20,
+      "embedding_tokens": 0,
+      "total_tokens": 580,
+      "estimated_cost_usd": 9.6e-05,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.028,
+        "semantic_cache_lookup": 0.048,
+        "knowledge_retrieval_ranking": 2.137,
+        "prompt_assembly": 0.959,
+        "llm_inference": 0.084,
+        "response_formatting": 0.003
+      },
+      "total_latency_ms": 3.259,
+      "metadata": {
+        "category": "Networking"
+      }
+    },
+    {
+      "query_id": "SQ-04",
+      "query_text": "How frequently must production API keys and bearer tokens be rotated under corporate policy?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 584,
+      "output_tokens": 38,
+      "embedding_tokens": 0,
+      "total_tokens": 622,
+      "estimated_cost_usd": 0.0001104,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.008,
+        "semantic_cache_lookup": 0.038,
+        "knowledge_retrieval_ranking": 2.121,
+        "prompt_assembly": 1.057,
+        "llm_inference": 0.089,
+        "response_formatting": 0.002
+      },
+      "total_latency_ms": 3.315,
+      "metadata": {
+        "category": "Security"
+      }
+    },
+    {
+      "query_id": "SQ-05",
+      "query_text": "What is the maximum token context window supported by the current AURONIX release?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 537,
+      "output_tokens": 24,
+      "embedding_tokens": 0,
+      "total_tokens": 561,
+      "estimated_cost_usd": 9.5e-05,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.005,
+        "semantic_cache_lookup": 0.03,
+        "knowledge_retrieval_ranking": 1.358,
+        "prompt_assembly": 0.525,
+        "llm_inference": 0.049,
+        "response_formatting": 0.002
+      },
+      "total_latency_ms": 1.969,
+      "metadata": {
+        "category": "Constraints"
+      }
+    },
+    {
+      "query_id": "SQ-06",
+      "query_text": "What is the target Recovery Time Objective (RTO) for the Aurora PostgreSQL primary database failover?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 513,
+      "output_tokens": 38,
+      "embedding_tokens": 0,
+      "total_tokens": 551,
+      "estimated_cost_usd": 9.97e-05,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.006,
+        "semantic_cache_lookup": 0.028,
+        "knowledge_retrieval_ranking": 1.992,
+        "prompt_assembly": 0.796,
+        "llm_inference": 0.113,
+        "response_formatting": 0.003
+      },
+      "total_latency_ms": 2.938,
+      "metadata": {
+        "category": "Operations"
+      }
+    },
+    {
+      "query_id": "SQ-07",
+      "query_text": "What command or script is executed to trigger the primary database replica promotion during a failover?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 511,
+      "output_tokens": 26,
+      "embedding_tokens": 0,
+      "total_tokens": 537,
+      "estimated_cost_usd": 9.22e-05,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.008,
+        "semantic_cache_lookup": 0.049,
+        "knowledge_retrieval_ranking": 2.064,
+        "prompt_assembly": 0.905,
+        "llm_inference": 0.102,
+        "response_formatting": 0.004
+      },
+      "total_latency_ms": 3.132,
+      "metadata": {
+        "category": "Operations"
+      }
+    },
+    {
+      "query_id": "SQ-08",
+      "query_text": "What was the measured PII masking accuracy rate reported in the Sprint 24 engineering sprint?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 516,
+      "output_tokens": 21,
+      "embedding_tokens": 0,
+      "total_tokens": 537,
+      "estimated_cost_usd": 9e-05,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.008,
+        "semantic_cache_lookup": 0.047,
+        "knowledge_retrieval_ranking": 2.111,
+        "prompt_assembly": 0.81,
+        "llm_inference": 0.083,
+        "response_formatting": 0.003
+      },
+      "total_latency_ms": 3.062,
+      "metadata": {
+        "category": "Privacy"
+      }
+    },
+    {
+      "query_id": "SQ-09",
+      "query_text": "What SQLite database file and journaling mode does AURONIX use for local audit logs?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 592,
+      "output_tokens": 29,
+      "embedding_tokens": 0,
+      "total_tokens": 621,
+      "estimated_cost_usd": 0.0001062,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.007,
+        "semantic_cache_lookup": 0.098,
+        "knowledge_retrieval_ranking": 2.032,
+        "prompt_assembly": 1.025,
+        "llm_inference": 0.105,
+        "response_formatting": 0.003
+      },
+      "total_latency_ms": 3.27,
+      "metadata": {
+        "category": "Database"
+      }
+    },
+    {
+      "query_id": "SQ-10",
+      "query_text": "Which Slack channel is designated for active P0 war room coordination during incidents?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 582,
+      "output_tokens": 31,
+      "embedding_tokens": 0,
+      "total_tokens": 613,
+      "estimated_cost_usd": 0.0001059,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.007,
+        "semantic_cache_lookup": 0.042,
+        "knowledge_retrieval_ranking": 1.933,
+        "prompt_assembly": 0.645,
+        "llm_inference": 0.057,
+        "response_formatting": 0.002
+      },
+      "total_latency_ms": 2.686,
+      "metadata": {
+        "category": "Incident Response"
+      }
+    },
+    {
+      "query_id": "SQ-11",
+      "query_text": "Explain how incoming user requests flow through Envoy edge proxy, the frontend dashboard, and the FastAPI core.",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 632,
+      "output_tokens": 97,
+      "embedding_tokens": 0,
+      "total_tokens": 729,
+      "estimated_cost_usd": 0.000153,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.006,
+        "semantic_cache_lookup": 0.031,
+        "knowledge_retrieval_ranking": 1.276,
+        "prompt_assembly": 0.544,
+        "llm_inference": 0.098,
+        "response_formatting": 0.003
+      },
+      "total_latency_ms": 1.958,
+      "metadata": {
+        "category": "Architecture Multi-hop"
+      }
+    },
+    {
+      "query_id": "SQ-12",
+      "query_text": "If an outage occurs during an active AI deployment, what incident escalation steps and security verification gates must be followed?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 617,
+      "output_tokens": 88,
+      "embedding_tokens": 0,
+      "total_tokens": 705,
+      "estimated_cost_usd": 0.0001453,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.006,
+        "semantic_cache_lookup": 0.026,
+        "knowledge_retrieval_ranking": 1.306,
+        "prompt_assembly": 0.525,
+        "llm_inference": 0.109,
+        "response_formatting": 0.003
+      },
+      "total_latency_ms": 1.975,
+      "metadata": {
+        "category": "Operations Multi-hop"
+      }
+    },
+    {
+      "query_id": "SQ-13",
+      "query_text": "What is the secret recipe for making authentic homemade Italian lasagna with bechamel sauce?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 505,
+      "output_tokens": 40,
+      "embedding_tokens": 0,
+      "total_tokens": 545,
+      "estimated_cost_usd": 9.97e-05,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.004,
+        "semantic_cache_lookup": 0.027,
+        "knowledge_retrieval_ranking": 1.244,
+        "prompt_assembly": 0.438,
+        "llm_inference": 0.048,
+        "response_formatting": 0.002
+      },
+      "total_latency_ms": 1.763,
+      "metadata": {
+        "category": "Out-of-Domain"
+      }
+    },
+    {
+      "query_id": "SQ-14",
+      "query_text": "Since AURONIX is configured to automatically reboot the entire AWS cloud datacenter whenever database replication lag exceeds 15 seconds, what IAM command triggers that cloud datacenter shutdown?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 561,
+      "output_tokens": 68,
+      "embedding_tokens": 0,
+      "total_tokens": 629,
+      "estimated_cost_usd": 0.000125,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.007,
+        "semantic_cache_lookup": 0.037,
+        "knowledge_retrieval_ranking": 1.363,
+        "prompt_assembly": 0.502,
+        "llm_inference": 0.073,
+        "response_formatting": 0.002
+      },
+      "total_latency_ms": 1.984,
+      "metadata": {
+        "category": "Adversarial"
+      }
+    },
+    {
+      "query_id": "SQ-15",
+      "query_text": "We are preparing for a major production migration next Tuesday involving three microservices. I need to know: First, what exact Envoy edge ingress ports must be opened and what scrape port is Prometheus listening on? Second, if replication lag exceeds 15 seconds on the primary Aurora cluster, what is the exact script to promote the replica and what is the target RTO? Third, which team lead should be notified if customer support routing is affected, and on which Slack channel? Please answer each of these three questions specifically.",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 659,
+      "output_tokens": 85,
+      "embedding_tokens": 0,
+      "total_tokens": 744,
+      "estimated_cost_usd": 0.0001498,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.016,
+        "semantic_cache_lookup": 0.088,
+        "knowledge_retrieval_ranking": 1.632,
+        "prompt_assembly": 0.521,
+        "llm_inference": 0.1,
+        "response_formatting": 0.003
+      },
+      "total_latency_ms": 2.36,
+      "metadata": {
+        "category": "Complex Multi-part"
+      }
+    },
+    {
+      "query_id": "SQ-16",
+      "query_text": "What is AURONIX mainly used for in our company?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 592,
+      "output_tokens": 46,
+      "embedding_tokens": 0,
+      "total_tokens": 638,
+      "estimated_cost_usd": 0.0001164,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.004,
+        "semantic_cache_lookup": 0.019,
+        "knowledge_retrieval_ranking": 1.195,
+        "prompt_assembly": 0.517,
+        "llm_inference": 0.057,
+        "response_formatting": 0.003
+      },
+      "total_latency_ms": 1.795,
+      "metadata": {
+        "category": "Semantic Duplicate"
+      }
+    },
+    {
+      "query_id": "SQ-17",
+      "query_text": "What port is allocated to the FastAPI backend service in the internal network matrix?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 561,
+      "output_tokens": 20,
+      "embedding_tokens": 0,
+      "total_tokens": 581,
+      "estimated_cost_usd": 9.62e-05,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.005,
+        "semantic_cache_lookup": 0.021,
+        "knowledge_retrieval_ranking": 1.243,
+        "prompt_assembly": 0.774,
+        "llm_inference": 0.112,
+        "response_formatting": 0.003
+      },
+      "total_latency_ms": 2.158,
+      "metadata": {
+        "category": "Semantic Paraphrase"
+      }
+    },
+    {
+      "query_id": "SQ-18",
+      "query_text": "What command or script is executed to trigger primary database replica promotion during failover?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 509,
+      "output_tokens": 26,
+      "embedding_tokens": 0,
+      "total_tokens": 535,
+      "estimated_cost_usd": 9.19e-05,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.008,
+        "semantic_cache_lookup": 0.042,
+        "knowledge_retrieval_ranking": 2.41,
+        "prompt_assembly": 0.894,
+        "llm_inference": 0.109,
+        "response_formatting": 0.003
+      },
+      "total_latency_ms": 3.466,
+      "metadata": {
+        "category": "Semantic Paraphrase"
+      }
+    },
+    {
+      "query_id": "SQ-19",
+      "query_text": "Which Slack channel is designated for active P0 war room coordination during production incidents?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 611,
+      "output_tokens": 31,
+      "embedding_tokens": 0,
+      "total_tokens": 642,
+      "estimated_cost_usd": 0.0001102,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.009,
+        "semantic_cache_lookup": 0.055,
+        "knowledge_retrieval_ranking": 2.128,
+        "prompt_assembly": 0.915,
+        "llm_inference": 0.102,
+        "response_formatting": 0.003
+      },
+      "total_latency_ms": 3.212,
+      "metadata": {
+        "category": "Semantic Paraphrase"
+      }
+    },
+    {
+      "query_id": "SQ-20",
+      "query_text": "What is the secret recipe for making authentic homemade Italian lasagna with rich bechamel sauce?",
+      "cache_hit": false,
+      "model": "gpt-4o-mini",
+      "input_tokens": 506,
+      "output_tokens": 40,
+      "embedding_tokens": 0,
+      "total_tokens": 546,
+      "estimated_cost_usd": 9.99e-05,
+      "step_latencies_ms": {
+        "input_validation_normalization": 0.007,
+        "semantic_cache_lookup": 0.065,
+        "knowledge_retrieval_ranking": 2.038,
+        "prompt_assembly": 0.716,
+        "llm_inference": 0.061,
+        "response_formatting": 0.002
+      },
+      "total_latency_ms": 2.889,
+      "metadata": {
+        "category": "Semantic Paraphrase"
+      }
+    }
+  ]
+}

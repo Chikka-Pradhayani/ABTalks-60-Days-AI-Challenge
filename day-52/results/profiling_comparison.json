@@ -1,0 +1,148 @@
+{
+  "timestamp": "2026-10-04 20:22:58",
+  "total_queries_profiled": 20,
+  "baseline_metrics": {
+    "avg_cost_per_query_usd": 0.0001096,
+    "avg_latency_per_query_ms": 4.357,
+    "avg_input_tokens": 562.6,
+    "avg_output_tokens": 42.1,
+    "cache_hit_rate_pct": 0.0,
+    "stage_breakdown": {
+      "input_validation_normalization": {
+        "mean_ms": 0.009,
+        "min_ms": 0.004,
+        "max_ms": 0.028,
+        "pct_of_total": 0.2
+      },
+      "semantic_cache_lookup": {
+        "mean_ms": 1.698,
+        "min_ms": 0.019,
+        "max_ms": 33.121,
+        "pct_of_total": 38.98
+      },
+      "knowledge_retrieval_ranking": {
+        "mean_ms": 1.801,
+        "min_ms": 1.195,
+        "max_ms": 2.41,
+        "pct_of_total": 41.34
+      },
+      "prompt_assembly": {
+        "mean_ms": 0.757,
+        "min_ms": 0.438,
+        "max_ms": 1.172,
+        "pct_of_total": 17.37
+      },
+      "llm_inference": {
+        "mean_ms": 0.089,
+        "min_ms": 0.048,
+        "max_ms": 0.134,
+        "pct_of_total": 2.05
+      },
+      "response_formatting": {
+        "mean_ms": 0.003,
+        "min_ms": 0.002,
+        "max_ms": 0.005,
+        "pct_of_total": 0.07
+      }
+    }
+  },
+  "optimized_metrics": {
+    "avg_cost_per_query_usd": 8.44e-05,
+    "avg_latency_per_query_ms": 2.406,
+    "avg_input_tokens": 423.6,
+    "avg_output_tokens": 34.0,
+    "cache_hit_rate_pct": 25.0,
+    "stage_breakdown": {
+      "input_validation_normalization": {
+        "mean_ms": 0.008,
+        "min_ms": 0.003,
+        "max_ms": 0.032,
+        "pct_of_total": 0.31
+      },
+      "semantic_cache_lookup": {
+        "mean_ms": 1.541,
+        "min_ms": 0.27,
+        "max_ms": 3.016,
+        "pct_of_total": 64.05
+      },
+      "knowledge_retrieval_ranking": {
+        "mean_ms": 0.204,
+        "min_ms": 0.0,
+        "max_ms": 0.764,
+        "pct_of_total": 8.5
+      },
+      "prompt_assembly": {
+        "mean_ms": 0.575,
+        "min_ms": 0.0,
+        "max_ms": 0.968,
+        "pct_of_total": 23.9
+      },
+      "llm_inference": {
+        "mean_ms": 0.076,
+        "min_ms": 0.0,
+        "max_ms": 0.206,
+        "pct_of_total": 3.15
+      },
+      "response_formatting": {
+        "mean_ms": 0.002,
+        "min_ms": 0.0,
+        "max_ms": 0.004,
+        "pct_of_total": 0.09
+      }
+    }
+  },
+  "improvements": {
+    "cost_reduction_pct": 22.99,
+    "latency_reduction_pct": 44.78
+  },
+  "monthly_projections": {
+    "1,000_per_day": {
+      "daily_volume": 1000,
+      "monthly_queries": 30000,
+      "baseline_monthly_cost_usd": 3.29,
+      "optimized_monthly_cost_usd": 2.53,
+      "monthly_savings_usd": 0.76,
+      "savings_pct": 22.99
+    },
+    "10,000_per_day": {
+      "daily_volume": 10000,
+      "monthly_queries": 300000,
+      "baseline_monthly_cost_usd": 32.88,
+      "optimized_monthly_cost_usd": 25.32,
+      "monthly_savings_usd": 7.56,
+      "savings_pct": 22.99
+    },
+    "100,000_per_day": {
+      "daily_volume": 100000,
+      "monthly_queries": 3000000,
+      "baseline_monthly_cost_usd": 328.8,
+      "optimized_monthly_cost_usd": 253.2,
+      "monthly_savings_usd": 75.6,
+      "savings_pct": 22.99
+    }
+  },
+  "top_3_cost_drivers": [
+    {
+      "driver": "RAG Context Prompt Tokens (Input Tokens)",
+      "explanation": "Injecting full multi-chunk document context into the LLM prompt accounts for over 85% of total query token consumption, directly multiplying per-token API charges on every un-cached request."
+    },
+    {
+      "driver": "LLM Synthesis Generation (Output Tokens)",
+      "explanation": "OpenAI generation is billed at 4x the rate of input tokens ($0.60 vs $0.15 per million for gpt-4o-mini), making lengthy multi-sentence technical answers the most expensive per-token component."
+    },
+    {
+      "driver": "Repeated Redundant Query Inferences (Uncached Invocations)",
+      "explanation": "Processing frequent, semantically equivalent operational queries through full LLM inference instead of returning cached responses incurs full input and output token fees redundantly."
+    }
+  ],
+  "top_2_latency_bottlenecks": [
+    {
+      "bottleneck": "Knowledge Retrieval & Token Jaccard/Overlap Ranking",
+      "explanation": "Scanning and tokenizing 50 full enterprise documents across multiple sections accounts for the largest fraction of local pipeline execution time on cache misses."
+    },
+    {
+      "bottleneck": "LLM Inference & Generation Time (Network / Model Compute)",
+      "explanation": "Waiting for downstream model token generation and streaming creates the dominant end-to-end user-perceived wall-clock delay during cold requests."
+    }
+  ]
+}

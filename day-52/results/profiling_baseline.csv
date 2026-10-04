@@ -1,0 +1,21 @@
+query_id,cache_hit,input_tokens,output_tokens,total_tokens,estimated_cost_usd,total_latency_ms,step_input_validation_normalization_ms,step_knowledge_retrieval_ranking_ms,step_llm_inference_ms,step_prompt_assembly_ms,step_response_formatting_ms,step_semantic_cache_lookup_ms,query_text
+SQ-01,False,592,46,638,0.0001164,36.742,0.009,2.301,0.134,1.172,0.005,33.121,What is AURONIX mainly used for in our company?
+SQ-02,False,512,28,540,9.36e-05,3.2,0.014,2.135,0.1,0.894,0.004,0.053,"Which engineering team owns and maintains the customer-support module, and who leads it?"
+SQ-03,False,560,20,580,9.6e-05,3.259,0.028,2.137,0.084,0.959,0.003,0.048,What port is allocated to the FastAPI backend service in the network matrix?
+SQ-04,False,584,38,622,0.0001104,3.315,0.008,2.121,0.089,1.057,0.002,0.038,How frequently must production API keys and bearer tokens be rotated under corporate policy?
+SQ-05,False,537,24,561,9.5e-05,1.969,0.005,1.358,0.049,0.525,0.002,0.03,What is the maximum token context window supported by the current AURONIX release?
+SQ-06,False,513,38,551,9.97e-05,2.938,0.006,1.992,0.113,0.796,0.003,0.028,What is the target Recovery Time Objective (RTO) for the Aurora PostgreSQL primary database failover?
+SQ-07,False,511,26,537,9.22e-05,3.132,0.008,2.064,0.102,0.905,0.004,0.049,What command or script is executed to trigger the primary database replica promotion during a failover?
+SQ-08,False,516,21,537,9e-05,3.062,0.008,2.111,0.083,0.81,0.003,0.047,What was the measured PII masking accuracy rate reported in the Sprint 24 engineering sprint?
+SQ-09,False,592,29,621,0.0001062,3.27,0.007,2.032,0.105,1.025,0.003,0.098,What SQLite database file and journaling mode does AURONIX use for local audit logs?
+SQ-10,False,582,31,613,0.0001059,2.686,0.007,1.933,0.057,0.645,0.002,0.042,Which Slack channel is designated for active P0 war room coordination during incidents?
+SQ-11,False,632,97,729,0.000153,1.958,0.006,1.276,0.098,0.544,0.003,0.031,"Explain how incoming user requests flow through Envoy edge proxy, the frontend dashboard, and the FastAPI core."
+SQ-12,False,617,88,705,0.0001453,1.975,0.006,1.306,0.109,0.525,0.003,0.026,"If an outage occurs during an active AI deployment, what incident escalation steps and security verification gates must be followed?"
+SQ-13,False,505,40,545,9.97e-05,1.763,0.004,1.244,0.048,0.438,0.002,0.027,What is the secret recipe for making authentic homemade Italian lasagna with bechamel sauce?
+SQ-14,False,561,68,629,0.000125,1.984,0.007,1.363,0.073,0.502,0.002,0.037,"Since AURONIX is configured to automatically reboot the entire AWS cloud datacenter whenever database replication lag exceeds 15 seconds, what IAM command triggers that cloud datacenter shutdown?"
+SQ-15,False,659,85,744,0.0001498,2.36,0.016,1.632,0.1,0.521,0.003,0.088,"We are preparing for a major production migration next Tuesday involving three microservices. I need to know: First, what exact Envoy edge ingress ports must be opened and what scrape port is Prometheus listening on? Second, if replication lag exceeds 15 seconds on the primary Aurora cluster, what is the exact script to promote the replica and what is the target RTO? Third, which team lead should be notified if customer support routing is affected, and on which Slack channel? Please answer each of these three questions specifically."
+SQ-16,False,592,46,638,0.0001164,1.795,0.004,1.195,0.057,0.517,0.003,0.019,What is AURONIX mainly used for in our company?
+SQ-17,False,561,20,581,9.62e-05,2.158,0.005,1.243,0.112,0.774,0.003,0.021,What port is allocated to the FastAPI backend service in the internal network matrix?
+SQ-18,False,509,26,535,9.19e-05,3.466,0.008,2.41,0.109,0.894,0.003,0.042,What command or script is executed to trigger primary database replica promotion during failover?
+SQ-19,False,611,31,642,0.0001102,3.212,0.009,2.128,0.102,0.915,0.003,0.055,Which Slack channel is designated for active P0 war room coordination during production incidents?
+SQ-20,False,506,40,546,9.99e-05,2.889,0.007,2.038,0.061,0.716,0.002,0.065,What is the secret recipe for making authentic homemade Italian lasagna with rich bechamel sauce?

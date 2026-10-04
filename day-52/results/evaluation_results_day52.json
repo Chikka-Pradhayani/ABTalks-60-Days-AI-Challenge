@@ -1,0 +1,114 @@
+{
+  "timestamp": "2026-10-04 20:22:41",
+  "quality_rule_satisfied": true,
+  "configurations": {
+    "baseline": {
+      "dimensional_scores": {
+        "correctness": 5.0,
+        "relevance": 4.367,
+        "completeness": 5.0,
+        "faithfulness": 4.3,
+        "hallucination_avoidance": 5.0,
+        "overall_score": 4.72
+      },
+      "tier_scores": {
+        "easy": 4.94,
+        "medium": 4.7,
+        "hard": 4.52
+      },
+      "avg_latency_ms": 2.27
+    },
+    "semantic_cache_only": {
+      "dimensional_scores": {
+        "correctness": 5.0,
+        "relevance": 4.367,
+        "completeness": 5.0,
+        "faithfulness": 4.3,
+        "hallucination_avoidance": 5.0,
+        "overall_score": 4.72
+      },
+      "tier_scores": {
+        "easy": 4.94,
+        "medium": 4.7,
+        "hard": 4.52
+      },
+      "avg_latency_ms": 2.324
+    },
+    "adaptive_retrieval_only": {
+      "dimensional_scores": {
+        "correctness": 5.0,
+        "relevance": 4.367,
+        "completeness": 5.0,
+        "faithfulness": 4.3,
+        "hallucination_avoidance": 5.0,
+        "overall_score": 4.72
+      },
+      "tier_scores": {
+        "easy": 4.94,
+        "medium": 4.7,
+        "hard": 4.52
+      },
+      "avg_latency_ms": 0.64
+    },
+    "combined_optimised": {
+      "dimensional_scores": {
+        "correctness": 5.0,
+        "relevance": 4.367,
+        "completeness": 5.0,
+        "faithfulness": 4.3,
+        "hallucination_avoidance": 5.0,
+        "overall_score": 4.72
+      },
+      "tier_scores": {
+        "easy": 4.94,
+        "medium": 4.7,
+        "hard": 4.52
+      },
+      "avg_latency_ms": 1.657
+    }
+  },
+  "dimensional_protection_check": {
+    "correctness": {
+      "baseline": 5.0,
+      "combined": 5.0,
+      "delta": 0.0,
+      "allowed_max_drop": -0.3,
+      "passed": true
+    },
+    "relevance": {
+      "baseline": 4.367,
+      "combined": 4.367,
+      "delta": 0.0,
+      "allowed_max_drop": -0.3,
+      "passed": true
+    },
+    "completeness": {
+      "baseline": 5.0,
+      "combined": 5.0,
+      "delta": 0.0,
+      "allowed_max_drop": -0.3,
+      "passed": true
+    },
+    "faithfulness": {
+      "baseline": 4.3,
+      "combined": 4.3,
+      "delta": 0.0,
+      "allowed_max_drop": -0.3,
+      "passed": true
+    },
+    "hallucination_avoidance": {
+      "baseline": 5.0,
+      "combined": 5.0,
+      "delta": 0.0,
+      "allowed_max_drop": -0.3,
+      "passed": true
+    },
+    "overall_score": {
+      "baseline": 4.72,
+      "combined": 4.72,
+      "delta": 0.0,
+      "allowed_max_drop": -0.3,
+      "passed": true
+    }
+  }
+}

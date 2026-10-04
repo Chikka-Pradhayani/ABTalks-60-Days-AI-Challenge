@@ -1,0 +1,21 @@
+query_id,cache_hit,input_tokens,output_tokens,total_tokens,estimated_cost_usd,total_latency_ms,step_input_validation_normalization_ms,step_knowledge_retrieval_ranking_ms,step_llm_inference_ms,step_prompt_assembly_ms,step_response_formatting_ms,step_semantic_cache_lookup_ms,query_text
+SQ-01,False,592,46,651,0.0001167,1.302,0.005,0.152,0.056,0.645,0.003,0.441,What is AURONIX mainly used for in our company?
+SQ-02,False,512,28,556,9.39e-05,1.079,0.005,0.149,0.077,0.575,0.003,0.27,"Which engineering team owns and maintains the customer-support module, and who leads it?"
+SQ-03,False,560,20,595,9.63e-05,2.084,0.006,0.286,0.076,0.968,0.003,0.745,What port is allocated to the FastAPI backend service in the network matrix?
+SQ-04,False,584,38,637,0.0001107,2.073,0.007,0.271,0.091,0.893,0.003,0.808,How frequently must production API keys and bearer tokens be rotated under corporate policy?
+SQ-05,False,537,24,578,9.53e-05,1.891,0.006,0.219,0.044,0.675,0.002,0.945,What is the maximum token context window supported by the current AURONIX release?
+SQ-06,False,513,38,571,0.0001001,1.806,0.007,0.28,0.101,0.793,0.003,0.622,What is the target Recovery Time Objective (RTO) for the Aurora PostgreSQL primary database failover?
+SQ-07,False,511,26,555,9.26e-05,1.828,0.007,0.141,0.086,0.644,0.003,0.947,What command or script is executed to trigger the primary database replica promotion during a failover?
+SQ-08,False,516,21,555,9.04e-05,2.052,0.006,0.243,0.039,0.485,0.002,1.277,What was the measured PII masking accuracy rate reported in the Sprint 24 engineering sprint?
+SQ-09,False,592,29,640,0.0001066,1.471,0.003,0.129,0.044,0.503,0.001,0.791,What SQLite database file and journaling mode does AURONIX use for local audit logs?
+SQ-10,False,582,31,628,0.0001062,2.268,0.003,0.233,0.088,0.845,0.003,1.096,Which Slack channel is designated for active P0 war room coordination during incidents?
+SQ-11,False,632,97,752,0.0001535,3.206,0.006,0.286,0.206,0.94,0.004,1.764,"Explain how incoming user requests flow through Envoy edge proxy, the frontend dashboard, and the FastAPI core."
+SQ-12,False,617,88,727,0.0001458,3.421,0.007,0.341,0.194,0.842,0.004,2.033,"If an outage occurs during an active AI deployment, what incident escalation steps and security verification gates must be followed?"
+SQ-13,False,505,40,563,0.0001001,2.564,0.004,0.245,0.095,0.837,0.003,1.38,What is the secret recipe for making authentic homemade Italian lasagna with bechamel sauce?
+SQ-14,False,561,68,664,0.0001256,3.821,0.013,0.35,0.148,0.899,0.003,2.408,"Since AURONIX is configured to automatically reboot the entire AWS cloud datacenter whenever database replication lag exceeds 15 seconds, what IAM command triggers that cloud datacenter shutdown?"
+SQ-15,False,659,85,847,0.0001519,4.946,0.032,0.764,0.17,0.96,0.004,3.016,"We are preparing for a major production migration next Tuesday involving three microservices. I need to know: First, what exact Envoy edge ingress ports must be opened and what scrape port is Prometheus listening on? Second, if replication lag exceeds 15 seconds on the primary Aurora cluster, what is the exact script to promote the replica and what is the target RTO? Third, which team lead should be notified if customer support routing is affected, and on which Slack channel? Please answer each of these three questions specifically."
+SQ-16,True,0,0,13,3e-07,2.439,0.005,0.0,0.0,0.0,0.0,2.434,What is AURONIX mainly used for in our company?
+SQ-17,True,0,0,16,3e-07,2.077,0.007,0.0,0.0,0.0,0.0,2.07,What port is allocated to the FastAPI backend service in the internal network matrix?
+SQ-18,True,0,0,16,3e-07,2.671,0.008,0.0,0.0,0.0,0.0,2.663,What command or script is executed to trigger primary database replica promotion during failover?
+SQ-19,True,0,0,16,3e-07,2.59,0.008,0.0,0.0,0.0,0.0,2.582,Which Slack channel is designated for active P0 war room coordination during production incidents?
+SQ-20,True,0,0,19,4e-07,2.536,0.006,0.0,0.0,0.0,0.0,2.53,What is the secret recipe for making authentic homemade Italian lasagna with rich bechamel sauce?
