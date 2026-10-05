@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: day-53/Dockerfile
+    container_name: auronix-backend-prod
+    ports:
+      - "${PORT:-8001}:8001"
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - PORT=8001
+      - HOST=0.0.0.0
+      - DATA_DIR=/app/data/${ENVIRONMENT:-production}
+      - FAISS_INDEX_PATH=/app/data/${ENVIRONMENT:-production}/faiss_index.bin
+      - DATABASE_URL=sqlite:////app/data/${ENVIRONMENT:-production}/auronix.db
+      - AURONIX_API_KEY=${AURONIX_API_KEY:-auronix-production-vault-key-2026}
+      - REDIS_URL=redis://cache:6379/0
+      - CORS_ORIGINS=${CORS_ORIGINS:-*}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - auronix_data:/app/data
+    depends_on:
+      cache:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  cache:
+    image: redis:7.2-alpine
+    container_name: auronix-redis-cache
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+
+volumes:
+  auronix_data:
+    driver: local
+  redis_data:
+    driver: local

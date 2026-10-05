@@ -1,0 +1,221 @@
+name: Production CI/CD Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: production-deployment-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Gate 1: Comprehensive Unit & Integration Tests (pytest)
+  # ---------------------------------------------------------------------------
+  test_gate:
+    name: "Gate 1: pytest Test Suite"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Pinned Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Complete pytest Suite
+        run: |
+          python -m pytest -v
+
+  # ---------------------------------------------------------------------------
+  # Gate 2: Day 50 Domain-Specific Eval & Regression Harness
+  # ---------------------------------------------------------------------------
+  eval_gate:
+    name: "Gate 2: Day 50 AI Regression Evaluation"
+    runs-on: ubuntu-latest
+    needs: test_gate
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Pinned Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Execute Exact Day 50 Regression Evaluation
+        run: |
+          python day-50/regression_test_runner.py
+
+      - name: Upload Day 50 Regression Test Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-test-results
+          path: day-50/results/regression_results_*.json
+          retention-days: 14
+
+  # ---------------------------------------------------------------------------
+  # Stage 3: Container Build Verification
+  # ---------------------------------------------------------------------------
+  build_container:
+    name: "Stage 3: Docker Build Verification"
+    runs-on: ubuntu-latest
+    needs: [test_gate, eval_gate]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Reproducible Production Container
+        run: |
+          docker build \
+            --tag auronix-backend:latest \
+            --file Dockerfile .
+
+  # ---------------------------------------------------------------------------
+  # Stage 4: Railway Staging Deployment & Verification
+  # ---------------------------------------------------------------------------
+  deploy_staging:
+    name: "Stage 4: Deploy & Verify Railway Staging"
+    runs-on: ubuntu-latest
+    needs: build_container
+    environment: staging
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Deploy Backend to Railway Staging
+        shell: bash
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE: ${{ secrets.RAILWAY_SERVICE_ID_STAGING }}
+        run: |
+          if [ -n "$RAILWAY_TOKEN" ]; then
+            echo "Installing Railway CLI..."
+            npm install -g @railway/cli
+            echo "Deploying to Railway staging environment..."
+            railway up --environment staging --service "${RAILWAY_SERVICE:-backend-staging}" --detach
+          else
+            echo "================================================================================"
+            echo "NOTICE: RAILWAY_TOKEN secret not configured in repository."
+            echo "Code and build gates passed. To enable automatic Railway staging deployment:"
+            echo "  1. Add RAILWAY_TOKEN in GitHub Settings -> Secrets and variables -> Actions"
+            echo "  2. Optionally add RAILWAY_SERVICE_ID_STAGING"
+            echo "================================================================================"
+          fi
+
+      - name: Verify Staging Health & Retrieval SLA
+        shell: bash
+        env:
+          STAGING_URL: ${{ secrets.STAGING_BACKEND_URL }}
+          STAGING_KEY: ${{ secrets.AURONIX_STAGING_API_KEY }}
+        run: |
+          if [ -n "$STAGING_URL" ]; then
+            python day-53/scripts/verify_staging.py \
+              --url "$STAGING_URL" \
+              --api-key "${STAGING_KEY:-auronix-staging-key-2026}"
+          else
+            echo "STAGING_BACKEND_URL not set in secrets; skipping remote network probe."
+            echo "Run 'python day-53/scripts/verify_staging.py --url <URL>' manually once staging is live."
+          fi
+
+  # ---------------------------------------------------------------------------
+  # Stage 5: Railway & Vercel Production Promotion
+  # ---------------------------------------------------------------------------
+  deploy_production:
+    name: "Stage 5: Production Deployment & Verification"
+    runs-on: ubuntu-latest
+    needs: deploy_staging
+    environment: production
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Deploy Backend to Railway Production
+        shell: bash
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE: ${{ secrets.RAILWAY_SERVICE_ID_PRODUCTION }}
+        run: |
+          if [ -n "$RAILWAY_TOKEN" ]; then
+            echo "Installing Railway CLI..."
+            npm install -g @railway/cli
+            echo "Deploying to Railway production environment..."
+            railway up --environment production --service "${RAILWAY_SERVICE:-backend-production}" --detach
+          else
+            echo "================================================================================"
+            echo "NOTICE: RAILWAY_TOKEN secret not configured for production."
+            echo "Configure RAILWAY_TOKEN and RAILWAY_SERVICE_ID_PRODUCTION in GitHub Secrets."
+            echo "================================================================================"
+          fi
+
+      - name: Deploy Frontend to Vercel Production
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          if [ -n "$VERCEL_TOKEN" ]; then
+            echo "Installing Vercel CLI..."
+            npm install -g vercel
+            echo "Deploying Next.js frontend to Vercel production..."
+            vercel --prod --token="$VERCEL_TOKEN" --yes
+          else
+            echo "================================================================================"
+            echo "NOTICE: VERCEL_TOKEN secret not configured for production."
+            echo "Configure VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID in GitHub Secrets."
+            echo "================================================================================"
+          fi
+
+      - name: Verify Production Health & SLA Compliance
+        shell: bash
+        env:
+          PROD_URL: ${{ secrets.PRODUCTION_BACKEND_URL }}
+          PROD_KEY: ${{ secrets.AURONIX_PRODUCTION_API_KEY }}
+        run: |
+          if [ -n "$PROD_URL" ]; then
+            python day-53/scripts/verify_production.py \
+              --url "$PROD_URL" \
+              --api-key "${PROD_KEY:-auronix-production-vault-key-2026}"
+          else
+            echo "PRODUCTION_BACKEND_URL not set in secrets; skipping remote network probe."
+            echo "Run 'python day-53/scripts/verify_production.py --url <URL>' manually once production is live."
+          fi

@@ -6,3 +6,20 @@ env/
 .env
 *.key
 *.pem
+
+# Data and SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+data/
+day-53/data/
+
+# Next.js / Node
+Day-49/.next/
+Day-49/out/
+Day-49/build/
+
+# IDE and OS
+.DS_Store
+Thumbs.db
+
