@@ -15,9 +15,12 @@ import sys
 import time
 import uuid
 import sqlite3
+import logging
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Union
+
+logger = logging.getLogger("auronix.backend")
 
 from fastapi import FastAPI, HTTPException, Header, Request, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -46,6 +49,7 @@ active_sessions: Dict[str, Dict[str, Any]] = {}
 
 # SQLite Persistence helper
 def get_db_connection() -> sqlite3.Connection:
+    """Creates and returns an active SQLite connection configured with sqlite3.Row factory."""
     os.makedirs(settings.data_dir, exist_ok=True)
     db_path = os.path.join(settings.data_dir, f"auronix_{settings.environment}.db")
     conn = sqlite3.connect(db_path, check_same_thread=False)
@@ -156,7 +160,12 @@ app.add_middleware(
 # Request / Response Schemas
 class AskRequest(BaseModel):
     session_id: str = Field(..., description="Active session UUID")
-    user_input: str = Field(..., min_length=1, description="Employee technical query")
+    user_input: str = Field(
+        ...,
+        min_length=1,
+        max_length=4000,
+        description="Employee technical query (maximum 4,000 characters to prevent buffer exhaustion)",
+    )
 
 
 class AskResponse(BaseModel):
@@ -181,9 +190,9 @@ class SessionResponse(BaseModel):
 
 class FeedbackRequest(BaseModel):
     session_id: str
-    user_query: str
+    user_query: str = Field(..., min_length=1, max_length=4000, description="Associated user query")
     rating: int = Field(..., ge=1, le=5, description="1 to 5 rating")
-    comment: Optional[str] = None
+    comment: Optional[str] = Field(None, max_length=2000, description="Optional user comment (max 2,000 characters)")
 
 
 class FeedbackResponse(BaseModel):
@@ -193,6 +202,7 @@ class FeedbackResponse(BaseModel):
 
 # Authentication Dependency
 def verify_api_key(x_api_key: Optional[str] = Header(None)) -> str:
+    """Validates that incoming HTTP requests supply the authorized x-api-key header."""
     if not x_api_key or not x_api_key.strip():
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -208,6 +218,7 @@ def verify_api_key(x_api_key: Optional[str] = Header(None)) -> str:
 
 # Rate Limiter Helper
 def enforce_rate_limit(session_id: str) -> None:
+    """Enforces sliding-window rate limiting per session ID to prevent resource abuse."""
     now = time.time()
     cutoff = now - 3600.0  # 1 hour window
     history = session_request_timestamps.get(session_id, [])
@@ -291,8 +302,8 @@ def create_session(x_api_key: str = Header(None)):
                 (session_id, now_iso, now_iso, settings.environment),
             )
             conn.commit()
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning("Failed to persist session '%s' to database: %s", session_id, exc)
 
     return SessionResponse(
         success=True,
@@ -373,8 +384,8 @@ def ask_question(payload: AskRequest, x_api_key: str = Header(None)):
                 (payload.session_id, payload.user_input.strip(), answer, latency_ms, retrieval_score, int(cache_hit), now_iso, settings.environment),
             )
             conn.commit()
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning("Failed to record request log for session '%s': %s", payload.session_id, exc)
 
     return AskResponse(
         success=True,
@@ -424,8 +435,8 @@ def get_metrics():
                 total_logs = row[0]
                 cache_hits = row[1] or 0
                 avg_latency = round(row[2] or 0.0, 2)
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning("Failed to retrieve query metrics: %s", exc)
 
     return {
         "environment": settings.environment,

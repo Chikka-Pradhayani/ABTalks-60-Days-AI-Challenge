@@ -29,10 +29,12 @@ class Settings:
 
     @property
     def is_staging(self) -> bool:
+        """Returns True if current environment is staging."""
         return self.environment.lower() == "staging"
 
     @property
     def is_production(self) -> bool:
+        """Returns True if current environment is production."""
         return self.environment.lower() == "production"
 
 
@@ -59,10 +61,16 @@ def get_settings() -> Settings:
     default_db_url = f"sqlite:///{os.path.join(data_dir, f'auronix_{environment}.db')}"
     database_url = os.getenv("DATABASE_URL", default_db_url).strip()
 
-    auronix_api_key = os.getenv(
-        "AURONIX_API_KEY",
-        "auronix-staging-key-2026" if environment == "staging" else "auronix-production-vault-key-2026"
-    ).strip()
+    raw_key = os.getenv("AURONIX_API_KEY")
+    if raw_key:
+        auronix_api_key = raw_key.strip()
+    else:
+        import logging
+        if environment == "production":
+            logging.getLogger("auronix.config").warning(
+                "SECURITY WARNING: AURONIX_API_KEY is not configured in environment. Using default fallback vault key."
+            )
+        auronix_api_key = "auronix-staging-key-2026" if environment == "staging" else "auronix-production-vault-key-2026"
 
     openai_api_key = os.getenv("OPENAI_API_KEY", "").strip()
     redis_url = os.getenv("REDIS_URL", "").strip()
