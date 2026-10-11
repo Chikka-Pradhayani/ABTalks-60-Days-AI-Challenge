@@ -421,12 +421,56 @@ def record_feedback(payload: FeedbackRequest, x_api_key: str = Header(None)):
     return FeedbackResponse(success=True, message="Feedback submitted successfully.")
 
 
+@app.get("/feedback/metrics", tags=["Monitoring & Analytics"])
+def get_feedback_metrics():
+    """Calculates aggregated feedback satisfaction metrics directly in the production API."""
+    total_feedback = 0
+    avg_rating = 0.0
+    positive_count = 0
+    neutral_count = 0
+    negative_count = 0
+
+    try:
+        with get_db_connection() as conn:
+            row = conn.execute("SELECT COUNT(*), AVG(rating) FROM feedback").fetchone()
+            if row and row[0]:
+                total_feedback = row[0]
+                avg_rating = round(float(row[1] or 0.0), 2)
+
+            pos_row = conn.execute("SELECT COUNT(*) FROM feedback WHERE rating >= 4").fetchone()
+            positive_count = pos_row[0] if pos_row else 0
+
+            neu_row = conn.execute("SELECT COUNT(*) FROM feedback WHERE rating = 3").fetchone()
+            neutral_count = neu_row[0] if neu_row else 0
+
+            neg_row = conn.execute("SELECT COUNT(*) FROM feedback WHERE rating <= 2").fetchone()
+            negative_count = neg_row[0] if neg_row else 0
+    except Exception as exc:
+        logger.warning("Failed to retrieve feedback metrics: %s", exc)
+
+    positive_rate_pct = round((positive_count / total_feedback) * 100.0, 2) if total_feedback > 0 else 0.0
+    negative_rate_pct = round((negative_count / total_feedback) * 100.0, 2) if total_feedback > 0 else 0.0
+
+    return {
+        "status": "active" if total_feedback > 0 else "pending_data",
+        "total_feedback_records": total_feedback,
+        "positive_ratings": positive_count,
+        "neutral_ratings": neutral_count,
+        "negative_ratings": negative_count,
+        "positive_rate_pct": positive_rate_pct,
+        "negative_rate_pct": negative_rate_pct,
+        "average_rating": avg_rating,
+    }
+
+
 @app.get("/api/v1/metrics", tags=["Monitoring"])
 def get_metrics():
     """Provides operational metrics for telemetry and monitoring."""
     total_logs = 0
     cache_hits = 0
     avg_latency = 0.0
+    total_feedback = 0
+    avg_rating = 0.0
 
     try:
         with get_db_connection() as conn:
@@ -435,6 +479,11 @@ def get_metrics():
                 total_logs = row[0]
                 cache_hits = row[1] or 0
                 avg_latency = round(row[2] or 0.0, 2)
+
+            feed_row = conn.execute("SELECT COUNT(*), AVG(rating) FROM feedback").fetchone()
+            if feed_row and feed_row[0]:
+                total_feedback = feed_row[0]
+                avg_rating = round(float(feed_row[1] or 0.0), 2)
     except Exception as exc:
         logger.warning("Failed to retrieve query metrics: %s", exc)
 
@@ -444,6 +493,8 @@ def get_metrics():
         "cache_hits": cache_hits,
         "cache_hit_rate": round(cache_hits / total_logs, 4) if total_logs > 0 else 0.0,
         "average_latency_ms": avg_latency,
+        "total_feedback_received": total_feedback,
+        "average_feedback_rating": avg_rating,
         "active_in_memory_sessions": len(active_sessions),
     }
 

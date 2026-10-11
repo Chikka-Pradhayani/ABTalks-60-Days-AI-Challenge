@@ -60,6 +60,20 @@ class TestHealthAndMonitoring(unittest.TestCase):
         self.assertIn("health", data)
         self.assertIn("docs", data)
 
+    def test_feedback_metrics_endpoint(self):
+        """GET /feedback/metrics must return HTTP 200 with aggregated feedback telemetry."""
+        response = self.client.get("/feedback/metrics")
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("status", data)
+        self.assertIn("total_feedback_records", data)
+        self.assertIn("positive_ratings", data)
+        self.assertIn("neutral_ratings", data)
+        self.assertIn("negative_ratings", data)
+        self.assertIn("positive_rate_pct", data)
+        self.assertIn("negative_rate_pct", data)
+        self.assertIn("average_rating", data)
+
 
 class TestEnvironmentIsolation(unittest.TestCase):
     """Verifies that staging and production environments maintain isolated configurations."""
